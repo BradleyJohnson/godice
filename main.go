@@ -16,9 +16,7 @@ func main() {
 		fmt.Println("Error parsing word count, please supply an integer")
 		os.Exit(1)
 	}
-
 	rolls := rollDice(numWords)
-	// translateRolls(rolls)
 	fmt.Println(translateRolls(rolls))
 }
 
@@ -38,14 +36,9 @@ func rollDice(c int) []string {
 func translateRolls(s []string) string {
 	var diceString string
 	for i := range s {
-		// start a go routine to find each word
-		// go findWord()
-
 		diceString = diceString + findWord(s[i])
 	}
 	return diceString
-	// listen on a channel to append the results to diceString
-
 }
 
 func findWord(s string) string {
