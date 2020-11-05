@@ -65,7 +65,7 @@ func findWord(s string) string {
 		}
 		if strings.Contains(scanner.Text(), s) {
 			foundWord = true
-			word = scanner.Text()[6:]
+			word = scanner.Text()[6:] + " "
 		}
 	}
 	return word
