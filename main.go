@@ -1,11 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -17,6 +18,7 @@ func main() {
 	}
 
 	rolls := rollDice(numWords)
+	// translateRolls(rolls)
 	fmt.Println(translateRolls(rolls))
 }
 
@@ -25,7 +27,7 @@ func rollDice(c int) []string {
 	var rollSlice []string
 	for i := 0; i < c; i++ {
 		var rollString string
-		for i := 0; i <= 5; i++ {
+		for i := 0; i <= 4; i++ {
 			rollString = rollString + fmt.Sprint(r.Intn(5)+1)
 		}
 		rollSlice = append(rollSlice, rollString)
@@ -35,11 +37,36 @@ func rollDice(c int) []string {
 
 func translateRolls(s []string) string {
 	var diceString string
-	dictionary, err := ioutil.ReadFile("source_dictionary")
+	for i := range s {
+		// start a go routine to find each word
+		// go findWord()
+
+		diceString = diceString + findWord(s[i])
+	}
+	return diceString
+	// listen on a channel to append the results to diceString
+
+}
+
+func findWord(s string) string {
+	dictionary, err := os.Open("source_dictionary")
 	if err != nil {
 		fmt.Println("Error while reading dictionary file")
 		os.Exit(1)
 	}
+	defer dictionary.Close()
+	var word string
+	var foundWord = false
 
-	return diceString
+	scanner := bufio.NewScanner(dictionary)
+	for scanner.Scan() {
+		if foundWord == true {
+			break
+		}
+		if strings.Contains(scanner.Text(), s) {
+			foundWord = true
+			word = scanner.Text()[6:]
+		}
+	}
+	return word
 }
